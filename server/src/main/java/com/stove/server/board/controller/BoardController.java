@@ -32,4 +32,19 @@ public class BoardController {
         Long id = boardService.create(boardRequestDto);
         return ResponseEntity.created(URI.create("api/v1/boards/" + id)).build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateBoard(
+            @PathVariable Long id,
+            @Valid @RequestBody BoardRequestDto boardRequestDto
+    ) {
+        boardService.update(id, boardRequestDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable Long id) {
+        boardService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

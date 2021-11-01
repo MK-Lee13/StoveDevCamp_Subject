@@ -4,6 +4,7 @@ import com.stove.server.board.domain.Board;
 import com.stove.server.board.dto.BoardRequestDto;
 import com.stove.server.board.dto.BoardResponseDto;
 import com.stove.server.board.repository.BoardRepository;
+import com.stove.server.common.exception.custom.NotFoundBoardException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,24 @@ public class BoardService {
     public Long create(BoardRequestDto boardRequestDto) {
         Board board = boardRepository.save(boardRequestDto.toEntity());
         return board.getId();
+    }
+
+    @Transactional
+    public void update(Long id, BoardRequestDto boardRequestDto) {
+        findBoardById(id);
+        Board board = boardRequestDto.toEntity();
+        board.setId(id);
+        boardRepository.save(board);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        findBoardById(id);
+        boardRepository.deleteById(id);
+    }
+
+    private void findBoardById(Long id) {
+        boardRepository.findById(id)
+                .orElseThrow(NotFoundBoardException::new);
     }
 }
