@@ -37,9 +37,8 @@ public class BoardService {
 
     @Transactional
     public void update(Long id, BoardRequestDto boardRequestDto) {
-        findBoardById(id);
-        Board board = boardRequestDto.toEntity();
-        board.setId(id);
+        Board board = findBoardById(id);
+        board.update(boardRequestDto);
         boardRepository.save(board);
     }
 
@@ -49,8 +48,8 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    private void findBoardById(Long id) {
-        boardRepository.findById(id)
+    private Board findBoardById(Long id) {
+        return boardRepository.findById(id)
                 .orElseThrow(NotFoundBoardException::new);
     }
 }

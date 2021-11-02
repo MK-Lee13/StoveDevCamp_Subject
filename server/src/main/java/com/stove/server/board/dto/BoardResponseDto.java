@@ -1,6 +1,7 @@
 package com.stove.server.board.dto;
 
 import com.stove.server.board.domain.Board;
+import com.stove.server.comment.dto.CommentResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.List;
@@ -17,12 +18,20 @@ public class BoardResponseDto {
     private String title;
     private String body;
     private String thumbnailUrl;
+    private List<CommentResponseDto> comments;
 
-    public BoardResponseDto(Long id, String title, String body, String thumbnailUrl) {
+    public BoardResponseDto(
+            Long id,
+            String title,
+            String body,
+            String thumbnailUrl,
+            List<CommentResponseDto> comments
+    ) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.thumbnailUrl = thumbnailUrl;
+        this.comments = comments;
     }
 
     public static BoardResponseDto of(Board board) {
@@ -30,7 +39,10 @@ public class BoardResponseDto {
                 board.getId(),
                 board.getTitle(),
                 board.getBody(),
-                board.getThumbnailUrl()
+                board.getThumbnailUrl(),
+                CommentResponseDto.listOf(
+                        board.getComments()
+                )
         );
     }
 

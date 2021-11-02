@@ -1,11 +1,12 @@
 package com.stove.server.board.domain;
 
+import com.stove.server.board.dto.BoardRequestDto;
+import com.stove.server.comment.domain.Comment;
 import com.stove.server.common.domain.BaseTimeEntity;
 import lombok.*;
-import org.springframework.lang.Nullable;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by Minky on 2021-10-30
@@ -22,14 +23,19 @@ public class Board extends BaseTimeEntity {
     @Column(name = "board_id")
     private Long id;
 
-    @NotEmpty
+    @NotNull
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @NotEmpty
+    @NotNull
+    @Column(nullable = false, length = 4000)
     private String body;
 
-    @Nullable
+    @Column(length = 400)
     private String thumbnailUrl;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Comment> comments;
 
     @Builder
     public Board(Long id, String title, String body, String thumbnailUrl) {
@@ -37,5 +43,11 @@ public class Board extends BaseTimeEntity {
         this.title = title;
         this.body = body;
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void update(BoardRequestDto boardRequestDto) {
+        this.title = boardRequestDto.getTitle();
+        this.body = boardRequestDto.getBody();
+        this.thumbnailUrl = boardRequestDto.getThumbnailUrl();
     }
 }
