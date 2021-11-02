@@ -6,19 +6,17 @@ const FooterContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 70px;
+    min-height: 50px;
     width: 100%;
     color: #eca4a6;
-    font-size: 1.2em;
+    font-size: 0.8em;
     font-family: Noto Sans KR;
-    border-top: 1px solid #eee;
-    margin-top: auto;
 `
 
 const Footer = () => {
   return (
     <FooterContainer>
-      Produced By Minky
+      Powered By Minky
     </FooterContainer>
   );
 }

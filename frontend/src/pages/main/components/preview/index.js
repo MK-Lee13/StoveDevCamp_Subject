@@ -2,6 +2,7 @@ import { get } from '../../../../utils/api';
 import React from 'react'
 import styled from 'styled-components';
 import Header from '../../../../components/header'
+import Middle from '../../../../components/middle'
 import Footer from '../../../../components/footer'
 
 const PreviewContainer = styled.div`
@@ -23,6 +24,7 @@ const BoardContainer = styled.div`
     flex-direction: column;
     width: 800px;
     margin-top: 80px;
+    margin-bottom: auto;
 `
 
 const NoContentElement = styled.div`
@@ -46,6 +48,7 @@ const BoardThumbail = styled.img`
     width: 192px;
     height: 192px;
     margin-right: 24px;
+    background: #D7DBD1;
 `
 
 const BoardBody = styled.div`
@@ -112,6 +115,10 @@ const Preview = () => {
       })
   }
 
+  const handleImgError = (e) => {
+    e.target.src = "default.png";
+  }
+
   React.useEffect(() => {
     getBoards()
   }, [])
@@ -124,9 +131,19 @@ const Preview = () => {
       </PreviewTitle>
       <BoardContainer>
         {boards && boards.map((element, index) => {
+          var thumbnailUrl = element.thumbnailUrl
+
+          if (thumbnailUrl === null || thumbnailUrl === "") {
+            thumbnailUrl = "default.png"
+          }
+
           return (
             <BoardElement key={index}>
-              <BoardThumbail src={element.thumbnailUrl}></BoardThumbail>
+              <BoardThumbail
+                src={thumbnailUrl}
+                alt="thumbnail_img"
+                onError={handleImgError}
+              />
               <BoardBody>
                 <BoardTitle>{element.title}</BoardTitle>
                 <BoardDesc>{element.body}</BoardDesc>
@@ -143,6 +160,7 @@ const Preview = () => {
           )
         }
       </BoardContainer>
+      <Middle isEdit={true} />
       <Footer />
     </PreviewContainer>
   );
