@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components';
+import { redirect } from '../../utils/redirect';
 
 const MiddleContainer = styled.div`
     display: flex;
@@ -91,7 +92,7 @@ const Middle = ({ isEdit }) => {
         {isEdit && (
           <EditBox>
             <EditTitle>New Post</EditTitle>
-            <EditIcon src="icn_create.png"></EditIcon>
+            <EditIcon src="icn_create.png" onClick={() => { redirect("/post") }}></EditIcon>
           </EditBox>
         )}
       </MiddleBox>
