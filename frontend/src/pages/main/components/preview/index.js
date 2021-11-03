@@ -1,4 +1,5 @@
 import { get } from '../../../../utils/api';
+import { redirect } from '../../../../utils/redirect';
 import React from 'react'
 import styled from 'styled-components';
 import Header from '../../../../components/header'
@@ -131,6 +132,7 @@ const Preview = () => {
       </PreviewTitle>
       <BoardContainer>
         {boards && boards.map((element, index) => {
+          const id = element.id
           var thumbnailUrl = element.thumbnailUrl
 
           if (thumbnailUrl === null || thumbnailUrl === "") {
@@ -147,7 +149,7 @@ const Preview = () => {
               <BoardBody>
                 <BoardTitle>{element.title}</BoardTitle>
                 <BoardDesc>{element.body}</BoardDesc>
-                <BoardButton>자세히 보기</BoardButton>
+                <BoardButton onClick={() => { redirect(`/board/${id}`) }}>자세히 보기</BoardButton>
               </BoardBody>
             </BoardElement>
           )
