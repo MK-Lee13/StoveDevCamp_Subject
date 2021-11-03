@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.stove.server.board.dto.BoardResponseDto.listOf;
+import static com.stove.server.board.dto.BoardResponseDto.of;
 
 /**
  * Created by Minky on 2021-11-02
@@ -27,6 +28,12 @@ public class BoardService {
     public List<BoardResponseDto> getBoards() {
         List<Board> boards = boardRepository.findAll();
         return listOf(boards);
+    }
+
+    @Transactional(readOnly = true)
+    public BoardResponseDto getBoard(Long id) {
+        Board board = findBoardById(id);
+        return of(board);
     }
 
     @Transactional
