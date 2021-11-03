@@ -30,7 +30,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Void> createComments(@Valid @RequestBody CommentRequestDto commentRequestDto) {
         Long id = commentService.create(commentRequestDto);
-        return ResponseEntity.created(URI.create("api/v1/comments" + id)).build();
+        return ResponseEntity.created(URI.create("api/v1/comments/" + id)).build();
     }
 
     @DeleteMapping("/{id}")
