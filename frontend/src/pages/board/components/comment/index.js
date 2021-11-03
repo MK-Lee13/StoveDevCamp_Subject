@@ -1,4 +1,5 @@
 import { postNoHeader, _delete } from '../../../../utils/api';
+import moment from 'moment-timezone';
 import React from 'react'
 import styled from 'styled-components';
 
@@ -62,6 +63,8 @@ const ReCommentInfoBox = styled.div`
 const CommentHeader = styled.div`
     display: flex;
     flex-direction: row;
+    font-size: 14px;
+    color: #807f89;
 `
 
 const CommentNickname = styled.div`
@@ -69,6 +72,13 @@ const CommentNickname = styled.div`
     font-size: 14px;
     font-family: Noto Sans KR;
     color: #eca4a6;
+    margin-right: 8px;
+`
+
+const CommentTime = styled.div`
+    font-size: 14px;
+    font-family: Noto Sans KR;
+    margin-left: 8px;
 `
 
 const CommentEditBox = styled.div`
@@ -265,12 +275,15 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
       .then(response => {
         let newId = getLocationToId(response)
         payloadBody.id = newId
+        payloadBody.createdDate = moment()
+          .tz("Asia/Seoul")
+          .format("YYYY.MM.DD HH:mm")
         let copyList = deepCopy(commentList)
         copyList.push(payloadBody)
         setCommentList(copyList)
       })
       .catch(error => {
-        console.log(error)
+        alert("댓글 등록에 실패하였습니다. 아래 이메일로 문의해주세요.")
       })
   }
 
@@ -302,7 +315,10 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
     return (
       <CommentBox style={{ marginLeft: `24px` }}>
         {reCommentIdList.includes(parentId) && childCommentList.map((element) => {
-          const { id, nickname, body } = element
+          const { id, nickname, body, createdDate } = element
+          let startMonent = moment(createdDate)
+            .tz("Asia/Seoul")
+            .format("YYYY.MM.DD HH:mm")
           const childFlag = findIdHasChild(id)
           return (
             <ReCommentWrapper key={id}>
@@ -310,7 +326,8 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
                 <CommentIcon src="/icn_right_arrow.png" />
                 <ReCommentInfoBox>
                   <CommentHeader>
-                    <CommentNickname>{nickname}</CommentNickname>
+                    <CommentNickname>{nickname}</CommentNickname> |
+                    <CommentTime>{startMonent}</CommentTime>
                     {childFlag && !reCommentIdList.includes(id) &&
                       <ArrowButton src="/icn_down.png" onClick={() => { pushRecommendId(id) }} />
                     }
@@ -371,7 +388,10 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
       </CommentPreBox>
       <CommentBox>
         {commentList && commentList.map((element) => {
-          const { id, parentId, nickname, body } = element
+          const { id, parentId, nickname, body, createdDate } = element
+          let startMonent = moment(createdDate)
+            .tz("Asia/Seoul")
+            .format("YYYY.MM.DD HH:mm")
           const childFlag = findIdHasChild(id)
           if (parentId !== null) {
             return;
@@ -379,7 +399,8 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
           return (
             <CommentElement key={id}>
               <CommentHeader>
-                <CommentNickname>{nickname}</CommentNickname>
+                <CommentNickname>{nickname}</CommentNickname> |
+                <CommentTime>{startMonent}</CommentTime>
                 {childFlag && !reCommentIdList.includes(id) &&
                   <ArrowButton src="/icn_down.png" onClick={() => { pushRecommendId(id) }} />
                 }

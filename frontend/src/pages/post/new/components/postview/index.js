@@ -37,7 +37,7 @@ const PostView = () => {
         alert("새로운 포스트를 등록하셨습니다")
         redirect("/main")
       }).catch(error => {
-        console.log(error.response)
+        alert("포스트 등록에 실패하였습니다. 아래 이메일로 문의해주세요.")
       })
 
   }

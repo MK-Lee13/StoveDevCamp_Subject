@@ -1,5 +1,6 @@
 import { get } from '../../../../utils/api';
 import { redirect } from '../../../../utils/redirect';
+import moment from 'moment-timezone';
 import React from 'react'
 import styled from 'styled-components';
 import Header from '../../../../components/header'
@@ -70,6 +71,12 @@ const BoardTitle = styled.div`
     padding: 8px 0 0 0;
 `
 
+const BoardTime = styled.div`
+    color: #807f89;
+    font-size: 14px;
+    font-family: Noto Sans KR;
+`
+
 const BoardDesc = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -112,7 +119,7 @@ const Preview = () => {
         }
       })
       .catch(error => {
-        console.log(error)
+        alert("알 수 없는 오류가 발생하였습니다. 아래 이메일로 문의해주세요.")
       })
   }
 
@@ -134,7 +141,9 @@ const Preview = () => {
         {boards && boards.map((element, index) => {
           const id = element.id
           var thumbnailUrl = element.thumbnailUrl
-
+          var startMonent = moment(element.createdDate)
+            .tz("Asia/Seoul")
+            .format("YYYY.MM.DD HH:mm")
           if (thumbnailUrl === null || thumbnailUrl === "") {
             thumbnailUrl = "default.png"
           }
@@ -148,6 +157,7 @@ const Preview = () => {
               />
               <BoardBody>
                 <BoardTitle>{element.title}</BoardTitle>
+                <BoardTime>{startMonent}</BoardTime>
                 <BoardDesc>{element.body}</BoardDesc>
                 <BoardButton onClick={() => { redirect(`/board/${id}`) }}>자세히 보기</BoardButton>
               </BoardBody>

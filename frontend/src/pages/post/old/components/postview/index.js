@@ -26,7 +26,6 @@ const PostView = ({ id }) => {
       .then(response => {
         setTitle(response.data.title)
         setDesc(response.data.body)
-        console.log(response.data)
       })
       .catch(error => {
         setNotFoundFlag(1)
@@ -54,7 +53,7 @@ const PostView = ({ id }) => {
         alert("포스트를 수정하셨습니다")
         redirect(`/board/${id}`)
       }).catch(error => {
-        console.log(error.response)
+        alert("포스트 수정에 실패하였습니다. 아래 이메일로 문의해주세요.")
       })
 
   }

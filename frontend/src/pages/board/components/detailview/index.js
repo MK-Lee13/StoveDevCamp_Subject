@@ -1,5 +1,6 @@
 import { get, _delete } from '../../../../utils/api';
 import { redirect } from '../../../../utils/redirect';
+import moment from 'moment-timezone';
 import React from 'react'
 import styled from 'styled-components';
 import Header from '../../../../components/header'
@@ -26,10 +27,17 @@ const DetailViewWrapper = styled.div`
 const DetailViewTitleBox = styled.div`
     padding: 5px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 28px;
     font-family: Noto Sans KR;
     line-height: 34px;
     word-wrap: break-word;
+`
+
+const DetailViewTimeBox = styled.div`
+    padding: 5px;
+    color: #807f89;
+    font-size: 14px;
+    font-family: Noto Sans KR;
 `
 
 const DetailViewEditBox = styled.div`
@@ -62,6 +70,7 @@ const DetailView = ({ id }) => {
   const [desc, setDesc] = React.useState("")
   const [commentList, setCommentList] = React.useState([])
   const [notFoundFlag, setNotFoundFlag] = React.useState(0)
+  const [startMonentString, setStartMonentString] = React.useState("")
 
   const getBoard = () => {
     get(`/api/v1/boards/${id}`, {})
@@ -69,6 +78,10 @@ const DetailView = ({ id }) => {
         setTitle(response.data.title)
         setDesc(response.data.body)
         setCommentList(response.data.comments)
+        let startMonent = moment(response.data.createdDate)
+          .tz("Asia/Seoul")
+          .format("YYYY.MM.DD HH:mm")
+        setStartMonentString(startMonent)
       })
       .catch(error => {
         setNotFoundFlag(1)
@@ -102,6 +115,7 @@ const DetailView = ({ id }) => {
           <DetailViewTitleBox>
             {title}
           </DetailViewTitleBox>
+          <DetailViewTimeBox>{startMonentString}</DetailViewTimeBox>
           <DetailViewEditBox>
             <DetailViewEditElement onClick={() => { redirect(`/post/${id}`) }}>수정</DetailViewEditElement>
             |
