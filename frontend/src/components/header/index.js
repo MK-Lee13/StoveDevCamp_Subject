@@ -11,7 +11,6 @@ const HeaderContainer = styled.div`
     width: 100%;
     margin-bottom: 60px;
     border-bottom: 1px solid #eee;
-    
 `
 
 const HeaderElement = styled.div`

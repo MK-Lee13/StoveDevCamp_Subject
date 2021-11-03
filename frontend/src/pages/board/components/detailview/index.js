@@ -6,6 +6,7 @@ import Header from '../../../../components/header'
 import Middle from '../../../../components/middle'
 import Footer from '../../../../components/footer'
 import NotFound from '../../../../components/notfound'
+import Comment from '../comment'
 
 const DetailViewContainer = styled.div`
     display: flex;
@@ -53,12 +54,13 @@ const DetailViewDescBox = styled.div`
     color: #807f89;
     font-size: 16px;
     font-family: Noto Sans KR;
-    margin-bottom: 60px;
+    margin-bottom: 20px;
 `
 
 const DetailView = ({ id }) => {
   const [title, setTitle] = React.useState("")
   const [desc, setDesc] = React.useState("")
+  const [commentList, setCommentList] = React.useState([])
   const [notFoundFlag, setNotFoundFlag] = React.useState(0)
 
   const getBoard = () => {
@@ -66,6 +68,7 @@ const DetailView = ({ id }) => {
       .then(response => {
         setTitle(response.data.title)
         setDesc(response.data.body)
+        setCommentList(response.data.comments)
       })
       .catch(error => {
         setNotFoundFlag(1)
@@ -111,6 +114,7 @@ const DetailView = ({ id }) => {
               })
             }
           </DetailViewDescBox>
+          <Comment commentList={commentList} setCommentList={setCommentList} boardId={id}></Comment>
         </DetailViewWrapper>}
       {notFoundFlag === 1 && <NotFound name="요청하신 게시글을 찾을 수 없습니다" />}
       <Middle isEdit={false} />
