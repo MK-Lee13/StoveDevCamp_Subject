@@ -58,7 +58,8 @@ public class CommentService {
 
     @Transactional
     public void deleteById(Long id, String password) {
-        Comment comment = findCommentById(id);
+        Comment comment = commentRepository.findByIdAndPassword(id, password)
+                .orElseThrow(NotFoundCommentException::new);
         Long parentId = comment.getParentId();
         if (parentId != null) {
             validateInChildComment(parentId);

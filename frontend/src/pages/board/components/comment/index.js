@@ -237,6 +237,12 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
     setReCommentIdList(filtered)
   }
 
+  const popCommentById = (id) => {
+    let copyList = deepCopy(commentList)
+    let filtered = copyList.filter((element) => element.id !== id);
+    setCommentList(filtered)
+  }
+
   const findIdHasChild = (id) => {
     for (let comment of commentList) {
       if (comment.parentId === id) {
@@ -265,6 +271,19 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
       })
       .catch(error => {
         console.log(error)
+      })
+  }
+
+  const deleteComment = (id) => {
+    let password = window.prompt('댓글 등록 시 지정한 패스워드를 입력하세요', '')
+
+    _delete(`/api/v1/comments/${id}`, { headers: { password: password } })
+      .then(response => {
+        alert("요청하신 댓글을 삭제하였습니다")
+        popCommentById(id)
+      })
+      .catch(error => {
+        alert("댓글 삭제에 실패하였습니다. 패스워드를 확인해주세요.")
       })
   }
 
@@ -299,7 +318,7 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
                       <ArrowButton src="/icn_up.png" onClick={() => { popRecommendId(id) }} />
                     }
                     <CommentEditBox>
-                      <CommentEditElement>삭제</CommentEditElement>
+                      <CommentEditElement onClick={() => { deleteComment(id) }}>삭제</CommentEditElement>
                       |
                       <CommentEditElement onClick={() => { setReCommentId(id) }}>댓글달기</CommentEditElement>
                     </CommentEditBox>
@@ -368,14 +387,14 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
                   <ArrowButton src="/icn_up.png" onClick={() => { popRecommendId(id) }} />
                 }
                 <CommentEditBox>
-                  <CommentEditElement>삭제</CommentEditElement>
+                  <CommentEditElement onClick={() => { deleteComment(id) }}>삭제</CommentEditElement>
                   |
                   <CommentEditElement onClick={() => { setReCommentId(id) }}>댓글달기</CommentEditElement>
                 </CommentEditBox>
               </CommentHeader>
               <CommentBody>{body}</CommentBody>
-              {id === reCommentId && getPostCommentView()}
               {getReComment(id)}
+              {id === reCommentId && getPostCommentView()}
             </CommentElement>
           )
         })}
