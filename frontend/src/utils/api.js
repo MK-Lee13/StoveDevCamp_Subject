@@ -20,6 +20,16 @@ export const postNoHeader = (middleUrl, payload) => {
   return axios.post(middleUrl, payload.body)
 };
 
+export const put = (middleUrl, payload) => {
+  return axios.put(middleUrl, payload.body, {
+    headers: payload.headers
+  })
+};
+
+export const putNoHeader = (middleUrl, payload) => {
+  return axios.put(middleUrl, payload.body)
+};
+
 export const _delete = (middleUrl, payload) => {
   return axios.delete(middleUrl, payload)
 };
