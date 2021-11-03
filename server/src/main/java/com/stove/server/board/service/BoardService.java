@@ -7,6 +7,7 @@ import com.stove.server.board.repository.BoardRepository;
 import com.stove.server.common.exception.custom.NotFoundBoardException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getBoards() {
-        List<Board> boards = boardRepository.findAll();
+        List<Board> boards = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         return listOf(boards);
     }
 
