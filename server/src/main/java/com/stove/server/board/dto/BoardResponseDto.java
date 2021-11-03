@@ -4,6 +4,8 @@ import com.stove.server.board.domain.Board;
 import com.stove.server.comment.dto.CommentResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ public class BoardResponseDto {
     private String title;
     private String body;
     private String thumbnailUrl;
+    private LocalDateTime createdDate;
     private List<CommentResponseDto> comments;
 
     public BoardResponseDto(
@@ -25,12 +28,14 @@ public class BoardResponseDto {
             String title,
             String body,
             String thumbnailUrl,
+            LocalDateTime createdDate,
             List<CommentResponseDto> comments
     ) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.thumbnailUrl = thumbnailUrl;
+        this.createdDate = createdDate;
         this.comments = comments;
     }
 
@@ -40,6 +45,7 @@ public class BoardResponseDto {
                 board.getTitle(),
                 board.getBody(),
                 board.getThumbnailUrl(),
+                board.getCreatedDate(),
                 CommentResponseDto.listOf(
                         board.getComments()
                 )

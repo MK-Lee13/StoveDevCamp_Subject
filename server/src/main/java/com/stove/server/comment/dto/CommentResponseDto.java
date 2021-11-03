@@ -4,6 +4,8 @@ import com.stove.server.comment.domain.Comment;
 import com.stove.server.comment.domain.CommentChildFlag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,19 +21,22 @@ public class CommentResponseDto {
     private CommentChildFlag commentChildFlag;
     private String nickname;
     private String body;
+    private LocalDateTime createdDate;
 
     public CommentResponseDto(
             Long id,
             Long parentId,
             CommentChildFlag commentChildFlag,
             String nickname,
-            String body
+            String body,
+            LocalDateTime createdDate
     ) {
         this.id = id;
         this.parentId = parentId;
         this.commentChildFlag = commentChildFlag;
         this.nickname = nickname;
         this.body = body;
+        this.createdDate = createdDate;
     }
 
     public static CommentResponseDto of(Comment comment) {
@@ -40,7 +45,8 @@ public class CommentResponseDto {
                 comment.getParentId(),
                 comment.getCommentChildFlag(),
                 comment.getNickname(),
-                comment.getBody()
+                comment.getBody(),
+                comment.getCreatedDate()
         );
     }
 
