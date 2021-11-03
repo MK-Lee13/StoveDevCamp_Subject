@@ -59,6 +59,7 @@ const DetailViewDescBox = styled.div`
     margin-top: 10px;
     line-height: 24px;
     word-wrap: break-word;
+    white-space: pre-wrap;
     color: #807f89;
     font-size: 16px;
     font-family: Noto Sans KR;
