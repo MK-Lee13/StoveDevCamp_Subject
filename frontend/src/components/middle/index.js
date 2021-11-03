@@ -92,7 +92,7 @@ const Middle = ({ isEdit }) => {
         {isEdit && (
           <EditBox>
             <EditTitle>New Post</EditTitle>
-            <EditIcon src="icn_create.png" onClick={() => { redirect("/post") }}></EditIcon>
+            <EditIcon src="icn_create.png" onClick={() => { redirect("/post/new") }}></EditIcon>
           </EditBox>
         )}
       </MiddleBox>
