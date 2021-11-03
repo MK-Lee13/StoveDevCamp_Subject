@@ -1,5 +1,6 @@
 import { putNoHeader, get } from '../../../../../utils/api';
 import { redirect } from '../../../../../utils/redirect';
+import { uploadFile } from '../../../../../utils/s3';
 import React from 'react'
 import styled from 'styled-components';
 import Header from '../../../../../components/header'
@@ -19,6 +20,7 @@ const PostViewContainer = styled.div`
 const PostView = ({ id }) => {
   const [title, setTitle] = React.useState(null)
   const [desc, setDesc] = React.useState(null)
+  const [url, setUrl] = React.useState(null)
   const [notFoundFlag, setNotFoundFlag] = React.useState(0)
 
   const getBoard = () => {
@@ -26,13 +28,14 @@ const PostView = ({ id }) => {
       .then(response => {
         setTitle(response.data.title)
         setDesc(response.data.body)
+        setUrl(response.data.thumbnailUrl)
       })
       .catch(error => {
         setNotFoundFlag(1)
       })
   }
 
-  const uploadOldPost = (title, desc) => {
+  const uploadOldPost = (title, desc, file, url) => {
     if (title.replace(/\s/g, "") === "") {
       alert("제목을 입력해주세요")
       return
@@ -43,11 +46,36 @@ const PostView = ({ id }) => {
       return
     }
 
-    putNoHeader(`/api/v1/boards/${id}`, {
-      body: {
+    if (file === null && url === null) {
+      postCallBoardsAction({
         title: title,
         body: desc
-      }
+      })
+    } else if (file === null && url !== null) {
+      postCallBoardsAction({
+        title: title,
+        body: desc,
+        thumbnailUrl: url
+      })
+    } else {
+      uploadFile(file)
+        .then(url => {
+          postCallBoardsAction({
+            title: title,
+            body: desc,
+            thumbnailUrl: url
+          })
+        })
+        .catch(error => {
+          alert("포스트 수정에 실패하였습니다. 아래 이메일로 문의해주세요.")
+        })
+    }
+  }
+
+
+  const postCallBoardsAction = (payload) => {
+    putNoHeader(`/api/v1/boards/${id}`, {
+      body: payload
     })
       .then(response => {
         alert("포스트를 수정하셨습니다")
@@ -55,8 +83,8 @@ const PostView = ({ id }) => {
       }).catch(error => {
         alert("포스트 수정에 실패하였습니다. 아래 이메일로 문의해주세요.")
       })
-
   }
+
 
   React.useEffect(() => {
     getBoard()
@@ -70,6 +98,7 @@ const PostView = ({ id }) => {
           clickToUploadAction={uploadOldPost}
           initTitle={title}
           initDesc={desc}
+          initUrl={url}
           buttonName="수정하기"
         ></Write>
       }
