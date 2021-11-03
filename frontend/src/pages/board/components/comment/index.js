@@ -263,6 +263,22 @@ const Comment = ({ commentList, setCommentList, boardId }) => {
   }
 
   const uploadComment = () => {
+    if (nickname.replace(/\s/g, "") === "") {
+      alert("닉네임을 입력해주세요")
+      return
+    }
+
+    if (password.replace(/\s/g, "") === "") {
+      alert("패스워드를 입력해주세요")
+      return
+    }
+
+    if (body.replace(/\s/g, "") === "") {
+      alert("댓글을 입력해주세요")
+      return
+    }
+
+
     let payloadBody = {
       boardId: boardId,
       parentId: reCommentId,
