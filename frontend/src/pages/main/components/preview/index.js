@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Header from '../../../../components/header'
 import Middle from '../../../../components/middle'
 import Footer from '../../../../components/footer'
+import PageBar from '../../../../components/pagebar'
 
 const PreviewContainer = styled.div`
     display: flex;
@@ -110,12 +111,16 @@ const BoardButton = styled.button`
 
 const Preview = () => {
   const [boards, setBoards] = React.useState(null)
+  const [totalPage, setTotalPage] = React.useState(0)
+  const [page, setPage] = React.useState(0)
 
   const getBoards = () => {
-    get("/api/v1/boards", {})
+    get(`/api/v1/boards?page=${page}`, {})
       .then(response => {
-        if (response.data.length !== 0) {
-          setBoards(response.data)
+        console.log(response.data)
+        setTotalPage(response.data.totalPages)
+        if (response.data.numberOfElements !== 0) {
+          setBoards(response.data.content)
         }
       })
       .catch(error => {
@@ -129,7 +134,7 @@ const Preview = () => {
 
   React.useEffect(() => {
     getBoards()
-  }, [])
+  }, [page])
 
   return (
     <PreviewContainer>
@@ -171,6 +176,7 @@ const Preview = () => {
             </NoContentElement>
           )
         }
+        {totalPage !== 0 && <PageBar page={page} setPage={setPage} totalPage={totalPage}></PageBar>}
       </BoardContainer>
       <Middle isEdit={true} />
       <Footer />
