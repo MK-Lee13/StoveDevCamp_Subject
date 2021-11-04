@@ -14,34 +14,35 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @Setter
+@Table(name = "comment_tb")
 public class Comment extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_sequence_gen")
     @SequenceGenerator(name = "comment_sequence_gen", sequenceName = "comment_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "comment_sequence_gen")
     @Column(name = "comment_id")
     private Long id;
 
-    @Column
+    @Column(name = "parent_id")
     private Long parentId;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "comment_child_flag", nullable = false, length = 50)
     @Enumerated(EnumType.STRING)
     private CommentChildFlag commentChildFlag;
 
     @NotNull
-    @Column(nullable = false, length = 50)
+    @Column(name = "comment_nickname", nullable = false, length = 50)
     private String nickname;
 
     @NotNull
-    @Column(nullable = false, length = 100)
+    @Column(name = "comment_password", nullable = false, length = 100)
     private String password;
 
     @NotNull
-    @Column(nullable = false, length = 4000)
+    @Column(name = "comment_body", nullable = false, length = 4000)
     private String body;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "board_id")
+    @ManyToOne(targetEntity = Board.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "board_id", referencedColumnName = "board_id")
     private Board board;
 
     @Builder

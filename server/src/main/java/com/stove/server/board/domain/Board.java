@@ -16,25 +16,26 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "board_tb")
 public class Board extends BaseTimeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_sequence_gen")
     @SequenceGenerator(name = "board_sequence_gen", sequenceName = "board_sequence")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "board_sequence_gen")
     @Column(name = "board_id")
     private Long id;
 
     @NotNull
-    @Column(nullable = false, length = 100)
+    @Column(name = "board_title", nullable = false, length = 100)
     private String title;
 
     @NotNull
-    @Column(nullable = false, length = 4000)
+    @Column(name = "board_body", nullable = false, length = 4000)
     private String body;
 
-    @Column(length = 400)
+    @Column(name = "board_thumbnail_url", length = 400)
     private String thumbnailUrl;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(targetEntity = Comment.class, mappedBy = "board", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Comment> comments;
 
     @Builder
