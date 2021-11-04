@@ -117,7 +117,6 @@ const Preview = () => {
   const getBoards = () => {
     get(`/api/v1/boards?page=${page}`, {})
       .then(response => {
-        console.log(response.data)
         setTotalPage(response.data.totalPages)
         if (response.data.numberOfElements !== 0) {
           setBoards(response.data.content)
