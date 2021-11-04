@@ -13,6 +13,7 @@ const PreviewContainer = styled.div`
     flex-direction: column;
     align-items: center;
     width: 100%;
+    min-width: 1000px;
     height: 100vh;
 `
 
